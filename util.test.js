@@ -1,5 +1,7 @@
 const { generateText, checkAndGenerate } = require('./util')
+const puppeteer = require('puppeteer')
 
+jest.setTimeout(100000)
 // Unit test
 test('should op a name and age', () => {
 	const text = generateText('Bisu', 20)
@@ -18,3 +20,23 @@ test('should output valid input value', () => {
 	const text = checkAndGenerate('Aju', 20)
 	expect(text).toBe('Aju (20 years old)')
 })
+
+test('E2E testing', async () => {
+	const browser = await puppeteer.launch({
+		headless: false,
+		slowMo: 50,
+		args: ['--window-size=1366,768'],
+	})
+
+	const page = await browser.newPage()
+	await page.goto('http://127.0.0.1:5500/index.html')
+
+	await page.click('input#name')
+	await page.type('input#name', 'Anna Gunn')
+	await page.click('input#age')
+	await page.type('input#age', '35')
+	await page.click('#btnAddUser')
+	expect(await page.$eval('.user-item', (el) => el.textContent)).toBe(
+		'Anna Gunn (35 years old)'
+	)
+}, 10000)
