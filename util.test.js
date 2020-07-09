@@ -21,11 +21,11 @@ test('should output valid input value', () => {
 	expect(text).toBe('Aju (20 years old)')
 })
 
-test('E2E testing', async () => {
+test('should create an element with valid text and correct class', async () => {
 	const browser = await puppeteer.launch({
-		headless: false,
-		slowMo: 50,
-		args: ['--window-size=1366,768'],
+		headless: true,
+		// slowMo: 50,
+		// args: ['--window-size=1366,768'],
 	})
 
 	const page = await browser.newPage()
